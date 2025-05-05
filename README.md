@@ -1,7 +1,7 @@
 # Đồ Án Phân Tích Dữ Liệu Việc Làm Tại Việt Nam
 
 ## Giới Thiệu
-Đây là đồ án môn DS108.P21, tập trung vào việc thu thập và phân tích dữ liệu việc làm tại Việt Nam. Dự án nhằm mục đích cung cấp cái nhìn sâu sắc về thị trường lao động Việt Nam thông qua việc phân tích dữ liệu từ các nền tảng tuyển dụng.
+Đây là đồ án môn DS108.P21, thuộc phạm vi trường Đại học Công nghệ Thông tin (UIT), tập trung vào việc thu thập và phân tích dữ liệu việc làm tại Việt Nam. Dự án nhằm mục đích cung cấp cái nhìn sâu sắc về thị trường lao động Việt Nam thông qua việc phân tích dữ liệu từ các nền tảng tuyển dụng.
 
 ## Thành Viên
 - **Đinh Thiên Ân** - 22520010
