@@ -7,6 +7,8 @@
 - **Đinh Thiên Ân** - 22520010
 - **Huỳnh Trọng Nghĩa** - 22520003
 
+
+
 ## Mục Lục
 - [Đồ Án Phân Tích Dữ Liệu Việc Làm Tại Việt Nam](#đồ-án-phân-tích-dữ-liệu-việc-làm-tại-việt-nam)
   - [Giới Thiệu](#giới-thiệu)
@@ -107,7 +109,68 @@ Sử dụng các thuật toán học máy để dự đoán mức lương dựa 
 
 ### 5. Triển Khai Hệ Thống MLOps (Coming Soon)
 Xây dựng hệ thống MLOps để tự động hóa quy trình từ thu thập dữ liệu, tiền xử lý, huấn luyện mô hình đến triển khai ứng dụng dự đoán lương.
+Sơ đồ quy trình:
+ ```mermaid
+graph TD
+    A[Raw Data] --> B[Data Loading]
+    B --> C[Clean Data]
+    C --> D[Clean Salary]
+    D --> E[Extract NLP Features]
+    E --> F[Encode Categorical Features]
+    F --> G[Split Data]
+    G --> H[Processed Data]
+    G --> I[Preprocessor Artifacts]
 
+    H --> J[train.py]
+    I --> J
+    J --> K[Initialize WandB Run]
+    K --> L[Train Decision Tree]
+    K --> M[Train Random Forest]
+    K --> N[Train XGBoost]
+    K --> O[Train Neural Network]
+    L --> P[Model Objects]
+    M --> P
+    N --> P
+    O --> P
+    P --> Q[Evaluate Models]
+    H --> Q
+    Q --> R[Log Metrics/Plots]
+    P --> S[Save Models]
+    I --> S
+    S --> T[Saved Models]
+    S --> U[Log Artifacts]
+
+    H --> V[test.py]
+    T --> V
+    V --> W[Load Models]
+    W --> X[Evaluate Models]
+    X --> Y[Save Evaluation Results]
+    Y --> Z[Generate Comparison Report]
+
+    AA[User Input] --> BB[predict_salary.py]
+    T --> BB
+    I --> BB
+    BB --> CC[Load Models]
+    CC --> DD[Preprocess Input]
+    DD --> EE[Predict Salary]
+    EE --> FF[Predicted Output]
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style H fill:#ccf,stroke:#333,stroke-width:1px
+    style I fill:#ccf,stroke:#333,stroke-width:1px
+    style T fill:#ccf,stroke:#333,stroke-width:1px
+    style Y fill:#cfc,stroke:#333,stroke-width:1px
+    style Z fill:#cfc,stroke:#333,stroke-width:1px
+    style FF fill:#cfc,stroke:#333,stroke-width:1px
+    style AA fill:#f9f,stroke:#333,stroke-width:2px
+    style B fill:#bbf,stroke:#333,stroke-width:2px
+    style J fill:#bbf,stroke:#333,stroke-width:2px
+    style V fill:#bbf,stroke:#333,stroke-width:2px
+    style BB fill:#bbf,stroke:#333,stroke-width:2px
+    style R fill:#fdb,stroke:#333,stroke-width:1px
+    style U fill:#fdb,stroke:#333,stroke-width:1px
+    style K fill:#fdb,stroke:#333,stroke-width:1px
+```
 ## Hướng Dẫn Sử Dụng
 
 ### Yêu Cầu

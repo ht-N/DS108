@@ -1,6 +1,37 @@
 # Salary Prediction System for Vietnamese Job Market
 
-This project provides a machine learning system to predict salaries based on job descriptions from the Vietnamese job market. It uses several models including Decision Trees, Random Forest, XGBoost, and Neural Networks with natural language processing techniques to process job requirements.
+This project provides a machine learning system to predict salaries based on job descriptions from the Vietnamese job market using Apache Kafka and Apache Spark for real-time and batch processing.
+
+## System Architecture
+
+The salary prediction system follows a modern MLOps architecture with streaming and batch capabilities:
+
+### Data Collection and Streaming
+- **Data Collection**: Raw job data is continuously collected from job posting sites
+- **Kafka Producer**: New job data is published to a Kafka topic `jobs`
+
+### Stream Processing
+- **Spark Structured Streaming**: Continuously reads from Kafka topic `jobs`
+- **Data Processing**: Cleans salary information, extracts NLP features from job requirements, and encodes categorical features
+- **Output**: Processed features are written to both:
+  - Feature Store (HDFS/Hive) for batch training
+  - Kafka topic `processed_jobs` for real-time predictions
+
+### Model Training (Offline Batch)
+- **Spark Batch Processing**: Periodically runs to train models using data from the Feature Store
+- **Model Training**: Trains multiple models:
+  - Decision Tree
+  - Random Forest 
+  - XGBoost
+  - Neural Network
+- **Model Evaluation**: Evaluates models and logs metrics to Weights & Biases
+- **Model Storage**: Saves trained models to HDFS and registers them in the Model Registry
+
+### Serving
+- **Prediction API Service**: Loads models from the Registry and serves predictions
+- **Real-time Processing**: Can process both:
+  - Direct user queries via REST API
+  - Streaming predictions from `processed_jobs` Kafka topic
 
 ## Project Structure
 
@@ -160,4 +191,61 @@ Visualizations of model performance are saved in the `results/` directory.
 
 - The system works best on job descriptions similar to those in the training data.
 - When encountering categories not seen during training, the system uses default values, which may affect prediction accuracy.
-- Salary predictions are given in millions of Vietnamese Dong (VND). 
+- Salary predictions are given in millions of Vietnamese Dong (VND).
+```mermaid
+graph TD
+    %% Data Collection and Streaming
+    A[Raw Job Data] --> B[Data Collector]
+    B --> C[Kafka Producer]
+    C --> D[Kafka Topic: jobs]
+    
+    %% Stream Processing with Spark
+    D --> E[Spark Structured Streaming]
+    E --> F[Clean Salary]
+    F --> G[Extract NLP Features]
+    G --> H[Encode Categorical Features]
+    H --> I[Feature Store/HDFS]
+    H --> J[Kafka Topic: processed_jobs]
+    
+    %% Offline Training Pipeline
+    I --> K[Spark Batch Processing]
+    K --> L[Split Data]
+    L --> M[Train Models]
+    M --> N[Decision Tree]
+    M --> O[Random Forest]
+    M --> P[XGBoost]
+    M --> Q[Neural Network]
+    N --> R[Model Evaluation]
+    O --> R
+    P --> R
+    Q --> R
+    R --> S[Log Metrics to WandB]
+    R --> T[Save Models to HDFS]
+    
+    %% Serving Pipeline
+    T --> U[Model Registry]
+    J --> V[Prediction API Service]
+    U --> V
+    V --> W[Salary Predictions]
+    
+    %% Input paths
+    X[User Query] --> V
+    
+    %% Styling
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style B fill:#bbf,stroke:#333,stroke-width:2px
+    style C fill:#fdb,stroke:#333,stroke-width:1px
+    style D fill:#fdb,stroke:#333,stroke-width:1px
+    style E fill:#c6f,stroke:#333,stroke-width:2px
+    style I fill:#ccf,stroke:#333,stroke-width:1px
+    style J fill:#fdb,stroke:#333,stroke-width:1px
+    style K fill:#c6f,stroke:#333,stroke-width:2px
+    style M fill:#bbf,stroke:#333,stroke-width:2px
+    style R fill:#cfc,stroke:#333,stroke-width:1px
+    style S fill:#fdb,stroke:#333,stroke-width:1px
+    style T fill:#ccf,stroke:#333,stroke-width:1px
+    style U fill:#ccf,stroke:#333,stroke-width:1px
+    style V fill:#bbf,stroke:#333,stroke-width:2px
+    style W fill:#cfc,stroke:#333,stroke-width:1px
+    style X fill:#f9f,stroke:#333,stroke-width:2px
+``` 
